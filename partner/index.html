@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#0f172a" />
+<title>Clariti Partner Insights</title>
+<style>
+  :root {
+    --bg: #f1f5f9; --card: #ffffff; --ink: #0f172a; --muted: #64748b; --line: #e2e8f0;
+    --mri: #0284c7; --mri-soft: #bae6fd; --usg: #ea580c; --usg-soft: #fed7aa;
+    --lab: #7c3aed; --other: #94a3b8; --good: #15803d; --good-bg: #dcfce7; --bad: #b91c1c; --bad-bg: #fee2e2;
+    --warn: #b45309; --warn-bg: #fef3c7; --track: #e2e8f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1120; --card: #111827; --ink: #e5e7eb; --muted: #94a3b8; --line: #1f2937;
+      --mri: #38bdf8; --mri-soft: #0c4a6e; --usg: #fb923c; --usg-soft: #7c2d12;
+      --lab: #a78bfa; --other: #64748b; --good: #4ade80; --good-bg: #052e16; --bad: #f87171; --bad-bg: #450a0a;
+      --warn: #fbbf24; --warn-bg: #422006; --track: #1f2937;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased; padding-bottom: env(safe-area-inset-bottom); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px 40px; }
+  header.top { position: sticky; top: 0; z-index: 5; background: #0f172a; color: #fff; padding: 12px 16px 0;
+    padding-top: calc(12px + env(safe-area-inset-top)); }
+  .top-row { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+  .brand { font-weight: 700; font-size: 17px; letter-spacing: .2px; }
+  .brand small { display: block; font-weight: 400; font-size: 12px; color: #94a3b8; }
+  .top-row .sp { flex: 1; }
+  .icon-btn { background: #1e293b; color: #e2e8f0; border: 0; border-radius: 8px; padding: 7px 10px; font-size: 13px; }
+  nav.tabs { max-width: 760px; margin: 10px auto 0; display: flex; gap: 4px; overflow-x: auto; }
+  nav.tabs a { color: #cbd5e1; text-decoration: none; padding: 8px 12px; font-size: 14px; border-bottom: 3px solid transparent; white-space: nowrap; }
+  nav.tabs a.on { color: #fff; border-bottom-color: #f59e0b; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin: 26px 0 10px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (min-width: 620px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .kpi .lab { font-size: 12.5px; color: var(--muted); }
+  .kpi .val { font-size: 24px; font-weight: 700; margin: 2px 0; font-variant-numeric: tabular-nums; }
+  .kpi .sub { font-size: 12.5px; color: var(--muted); }
+  .kpi.hero { grid-column: 1 / -1; }
+  .kpi.hero .val { font-size: 32px; }
+  .bar { position: relative; height: 10px; background: var(--track); border-radius: 6px; margin-top: 8px; overflow: hidden; }
+  .bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; }
+  .bar > i.proj { opacity: .35; }
+  .pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+  .pill.good { color: var(--good); background: var(--good-bg); }
+  .pill.bad { color: var(--bad); background: var(--bad-bg); }
+  .pill.warn { color: var(--warn); background: var(--warn-bg); }
+  .seg { display: inline-flex; background: var(--track); border-radius: 9px; padding: 3px; margin-bottom: 10px; }
+  .seg button { border: 0; background: transparent; color: var(--muted); padding: 6px 14px; border-radius: 7px; font-size: 14px; font-weight: 600; }
+  .seg button.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+  .chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .chart text { fill: var(--muted); font-size: 11px; }
+  .chart .v { fill: var(--ink); font-size: 11px; font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .list { list-style: none; margin: 0; padding: 0; }
+  .list li { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); }
+  .list li:first-child { border-top: 0; }
+  .list .nm { flex: 1; min-width: 0; }
+  .list .nm b { display: block; font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .list .nm span { font-size: 12px; color: var(--muted); }
+  .list .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; min-width: 44px; }
+  .list .num span { display: block; font-size: 11.5px; color: var(--muted); font-weight: 400; }
+  .stats { display: flex; gap: 10px; margin-bottom: 12px; }
+  .stats .card { flex: 1; margin: 0; padding: 12px; }
+  .note { font-size: 12.5px; color: var(--muted); }
+  .center { text-align: center; padding: 60px 16px; }
+  .center h1 { font-size: 22px; margin: 0 0 8px; }
+  .err { color: var(--bad); }
+  .hidden { display: none !important; }
+  .spinner { width: 28px; height: 28px; border: 3px solid var(--track); border-top-color: var(--mri); border-radius: 50%;
+    animation: spin .8s linear infinite; margin: 0 auto 14px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #gbtn { display: inline-block; margin-top: 18px; }
+  .demo-flag { background: #f59e0b; color: #111; text-align: center; font-size: 12.5px; font-weight: 600; padding: 4px; }
+</style>
+</head>
+<body>
+<div id="demoFlag" class="demo-flag hidden">Sample data with made-up doctors, for preview only</div>
+<header class="top">
+  <div class="top-row">
+    <div class="brand">Clariti Scan World<small id="subtitle">Partner insights</small></div>
+    <div class="sp"></div>
+    <button class="icon-btn hidden" id="refreshBtn" type="button" aria-label="Refresh">↻</button>
+    <button class="icon-btn hidden" id="signOutBtn" type="button">Sign out</button>
+  </div>
+  <nav class="tabs hidden" id="tabs">
+    <a href="#overview" class="on">Overview</a>
+    <a href="#trend">Trend</a>
+    <a href="#referrers">Referrers</a>
+    <a href="#behind">Behind potential</a>
+    <a href="#field">Field team</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section id="gate" class="center">
+    <div class="spinner" id="gateSpin"></div>
+    <h1 id="gateTitle">Loading…</h1>
+    <p class="note" id="gateMsg"></p>
+    <div id="gbtn"></div>
+  </section>
+
+  <div id="app" class="hidden">
+    <h2 id="overview">This month <span id="monthName"></span></h2>
+    <div class="grid" id="kpis"></div>
+    <p class="note" id="freshness"></p>
+
+    <h2 id="trend">Month by month</h2>
+    <div class="card chart">
+      <div class="seg" data-seg="trend"><button class="on" data-v="cases">Cases</button><button data-v="revenue">Revenue</button></div>
+      <div id="trendChart"></div>
+      <div class="legend" id="trendLegend"></div>
+    </div>
+
+    <h2 id="referrers">Referring doctors</h2>
+    <div class="seg" data-seg="ref"><button class="on" data-v="mri">MRI</button><button data-v="usg">USG</button></div>
+    <div class="stats" id="refStats"></div>
+    <div class="card"><b>Top this month</b><ul class="list" id="refTop"></ul></div>
+    <div class="card"><b>New this month</b> <span class="note">sent nothing last month</span><ul class="list" id="refNew"></ul></div>
+    <div class="card"><b>Gone quiet</b> <span class="note">3+ cases last month, none yet this month</span><ul class="list" id="refQuiet"></ul></div>
+
+    <h2 id="behind">Furthest behind potential</h2>
+    <div class="seg" data-seg="gap"><button class="on" data-v="mri">MRI</button><button data-v="usg">USG</button></div>
+    <div class="card"><ul class="list" id="gapList"></ul>
+      <p class="note">Potential = the doctor's best month so far, or the potential the PROs entered if higher. Expected = potential scaled to the days passed.</p></div>
+
+    <h2 id="field">Field team</h2>
+    <div class="card chart"><b>Doctor visits per week</b><div id="visitChart"></div><div class="legend" id="visitLegend"></div></div>
+    <div class="card"><b>Case lists</b> <span class="note" id="clPeriod"></span><ul class="list" id="clList"></ul></div>
+    <p class="note">Only totals are shown here. Patient names, phone numbers and payouts stay in the sheet.</p>
+  </div>
+</main>
+
+<script>
+/* ===== Settings (fill these in after deploying partner/Code.gs) ===== */
+var SCRIPT_URL = '';        // Apps Script Web App URL ending in /exec
+var GOOGLE_CLIENT_ID = '';  // OAuth Web client ID (xxxx.apps.googleusercontent.com)
+/* ==================================================================== */
+
+var state = { data: null, trend: 'cases', ref: 'mri', gap: 'mri' };
+var DEMO = /[?&]demo=1\b/.test(location.search);
+var TOKEN_KEY = 'clariti_partner_token';
+
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function fmtN(n) { return Math.round(n || 0).toLocaleString('en-IN'); }
+function fmtL(n) { var l = (n || 0) / 1e5; return '₹' + (l >= 100 ? (l / 100).toFixed(2) + ' Cr' : l.toFixed(l >= 10 ? 1 : 2) + 'L'); }
+function monthLabel(ym, long) { var p = ym.split('-'); return new Date(+p[0], +p[1] - 1, 1).toLocaleString('en-IN', { month: long ? 'long' : 'short' }); }
+function daysAgo(iso) { if (!iso) return null; var p = iso.split('-'); var d = new Date(+p[0], +p[1] - 1, +p[2]); return Math.round((new Date().setHours(0, 0, 0, 0) - d) / 864e5); }
+function ss(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch (e) { return null; } }
+
+function gate(title, msg, spin) {
+  $('gate').classList.remove('hidden'); $('app').classList.add('hidden'); $('tabs').classList.add('hidden');
+  $('gateTitle').textContent = title; $('gateMsg').textContent = msg || ''; $('gateSpin').classList.toggle('hidden', !spin);
+}
+
+/* ---------- sign-in and loading ---------- */
+function start() {
+  if (DEMO) { $('demoFlag').classList.remove('hidden'); return fetch('demo.json').then(function (r) { return r.json(); }).then(show); }
+  if (!SCRIPT_URL || !GOOGLE_CLIENT_ID) return gate('Not set up yet', 'The data connection has not been added to this page yet. Add ?demo=1 to the address to preview it with sample data.');
+  var tok = ss(TOKEN_KEY);
+  if (tok && tokenValid(tok)) return load({ id_token: tok });
+  showSignIn();
+}
+
+function tokenValid(t) {
+  try { var p = JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); return p.exp * 1000 > Date.now() + 60000; } catch (e) { return false; }
+}
+
+function showSignIn(msg) {
+  gate('Partner insights', msg || 'Sign in with the Google account Deepak added for you.', false);
+  var tries = 0;
+  (function wait() {
+    if (window.google && google.accounts && google.accounts.id) {
+      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onCredential, auto_select: true, itp_support: true });
+      google.accounts.id.renderButton($('gbtn'), { theme: 'filled_blue', size: 'large', shape: 'pill', text: 'signin_with' });
+      google.accounts.id.prompt();
+    } else if (tries++ < 50) setTimeout(wait, 100);
+    else $('gateMsg').textContent = 'Could not load Google sign-in. Check the connection and reload.';
+  })();
+}
+
+function onCredential(resp) { ss(TOKEN_KEY, resp.credential); load({ id_token: resp.credential }); }
+
+function load(body) {
+  gate('Loading…', 'Reading the latest numbers.', true);
+  fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (res) {
+      if (res.status === 'success') return show(res.data);
+      ss(TOKEN_KEY, null);
+      if (res.status === 'denied') return showSignIn(res.error);
+      gate('Something went wrong', res.error || 'Please try again later.');
+    })
+    .catch(function () { gate('No connection', 'Could not reach the data. Check the internet connection and pull down to reload.'); });
+}
+
+$('signOutBtn').onclick = function () {
+  ss(TOKEN_KEY, null);
+  if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
+  showSignIn('Signed out.');
+};
+$('refreshBtn').onclick = function () {
+  if (DEMO) return;
+  var tok = ss(TOKEN_KEY);
+  if (tok && tokenValid(tok)) load({ id_token: tok, refresh: true }); else showSignIn('Please sign in again.');
+};
+
+/* ---------- render ---------- */
+function show(d) {
+  state.data = d;
+  $('gate').classList.add('hidden'); $('app').classList.remove('hidden'); $('tabs').classList.remove('hidden');
+  $('refreshBtn').classList.toggle('hidden', DEMO); $('signOutBtn').classList.toggle('hidden', DEMO);
+  var ym = (d.dataUpTo || '').slice(0, 7);
+  $('monthName').textContent = ym ? '(' + monthLabel(ym, true) + ')' : '';
+  var age = daysAgo(d.dataUpTo);
+  $('freshness').innerHTML = 'Bills up to <b>' + esc(fmtDate(d.dataUpTo)) + '</b>' + (age > 2 ? ' <span class="pill warn">' + age + ' days old</span>' : '') +
+    '. The sheet is refreshed from Hodo by hand, so the last few days may be missing.';
+  renderKpis(d); renderTrend(); renderRef(); renderGap(); renderVisits(d); renderCaseLists(d);
+}
+
+function fmtDate(iso) { if (!iso) return '—'; var p = iso.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); }
+
+function line(label) { var ls = (state.data.usg && state.data.usg.lines) || []; for (var i = 0; i < ls.length; i++) if (ls[i].label.toLowerCase().indexOf(label) === 0) return ls[i]; return null; }
+
+function kpi(o) {
+  var pct = o.target ? Math.min(100, o.soFar / o.target * 100) : 0, pj = o.target ? Math.min(100, o.projected / o.target * 100) : 0;
+  var gap = o.target ? o.projected - o.target : null;
+  var pill = gap == null ? '' : '<span class="pill ' + (gap >= 0 ? 'good' : 'bad') + '">' + (gap >= 0 ? 'On track' : 'Short ' + o.fmt(-gap)) + '</span>';
+  return '<div class="card kpi' + (o.hero ? ' hero' : '') + '"><div class="lab">' + esc(o.label) + '</div>' +
+    '<div class="val">' + o.fmt(o.soFar) + '</div>' +
+    '<div class="sub">' + (o.target ? 'Target ' + o.fmt(o.target) + ' · heading for ' : 'Heading for ') + o.fmt(o.projected) + (o.last != null ? ' · last month ' + o.fmt(o.last) : '') + '</div>' +
+    (o.target ? '<div class="bar"><i class="proj" style="width:' + pj + '%;background:' + o.color + '"></i><i style="width:' + pct + '%;background:' + o.color + '"></i></div>' : '') +
+    (pill ? '<div style="margin-top:8px">' + pill + '</div>' : '') + '</div>';
+}
+
+function renderKpis(d) {
+  var m = d.mri || {}, uc = line('usg cases'), ur = line('usg revenue'), lr = line('lab revenue'), all = line('all revenue');
+  var lastMonth = d.monthly && d.monthly.length > 1 ? d.monthly[d.monthly.length - 2] : null;
+  var h = kpi({ hero: true, label: 'MRI cases', soFar: m.soFar, target: m.target, projected: m.projected, last: m.lastMonth, fmt: fmtN, color: 'var(--mri)' });
+  if (all) h += kpi({ hero: true, label: 'All revenue', soFar: all.soFar, target: all.target, projected: all.projected, last: all.lastMonth, fmt: fmtL, color: 'var(--good)' });
+  h += kpi({ label: 'MRI revenue', soFar: m.revenueSoFar, projected: m.revenueProjected, last: lastMonth && lastMonth.mri, fmt: fmtL, color: 'var(--mri)' });
+  if (uc) h += kpi({ label: 'USG cases', soFar: uc.soFar, target: uc.target, projected: uc.projected, last: uc.lastMonth, fmt: fmtN, color: 'var(--usg)' });
+  if (ur) h += kpi({ label: 'USG revenue', soFar: ur.soFar, target: ur.target, projected: ur.projected, last: ur.lastMonth, fmt: fmtL, color: 'var(--usg)' });
+  if (lr) h += kpi({ label: 'Lab revenue', soFar: lr.soFar, target: lr.target, projected: lr.projected, last: lr.lastMonth, fmt: fmtL, color: 'var(--lab)' });
+  $('kpis').innerHTML = h;
+}
+
+/* Grouped / stacked bar chart in plain SVG */
+function bars(months, series, opts) {
+  var W = 340, H = 180, padL = 4, padB = 22, padT = 18, n = months.length;
+  var totals = months.map(function (m) { return opts.stack ? series.reduce(function (s, x) { return s + (m[x.key] || 0); }, 0) : Math.max.apply(null, series.map(function (x) { return m[x.key] || 0; })); });
+  var max = Math.max.apply(null, totals.concat([1]));
+  var slot = (W - padL) / n, bw = opts.stack ? slot * 0.6 : slot * 0.7 / series.length;
+  var y = function (v) { return (H - padB - padT) * v / max; };
+  var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img">';
+  months.forEach(function (m, i) {
+    var x0 = padL + i * slot + (slot - (opts.stack ? bw : bw * series.length)) / 2, base = H - padB, op = m.partial ? ' opacity=".55"' : '';
+    if (opts.stack) {
+      var acc = 0;
+      series.forEach(function (s) { var h = y(m[s.key] || 0); out += '<rect x="' + x0 + '" y="' + (base - acc - h) + '" width="' + bw + '" height="' + h + '" fill="' + s.color + '"' + op + '/>'; acc += h; });
+      out += '<text class="v" x="' + (x0 + bw / 2) + '" y="' + (base - acc - 5) + '" text-anchor="middle">' + opts.fmt(totals[i]) + '</text>';
+    } else {
+      series.forEach(function (s, j) {
+        var v = m[s.key] || 0, h = y(v), x = x0 + j * bw;
+        out += '<rect x="' + x + '" y="' + (base - h) + '" width="' + (bw - 2) + '" height="' + h + '" rx="2" fill="' + s.color + '"' + op + '/>';
+        out += '<text class="v" x="' + (x + bw / 2 - 1) + '" y="' + (base - h - 4) + '" text-anchor="middle">' + opts.fmt(v) + '</text>';
+      });
+    }
+    out += '<text x="' + (padL + i * slot + slot / 2) + '" y="' + (H - 6) + '" text-anchor="middle">' + monthLabel(m.month) + (m.partial ? '*' : '') + '</text>';
+  });
+  return out + '</svg>';
+}
+
+function legend(series, extra) {
+  return series.map(function (s) { return '<span><i style="background:' + s.color + '"></i>' + s.name + '</span>'; }).join('') + (extra ? '<span>' + extra + '</span>' : '');
+}
+
+function renderTrend() {
+  var ms = state.data.monthly || [], partialNote = ms.some(function (m) { return m.partial; }) ? '* this month so far' : '';
+  if (state.trend === 'cases') {
+    var s = [{ key: 'mriCases', name: 'MRI', color: 'var(--mri)' }, { key: 'usgCases', name: 'USG', color: 'var(--usg)' }];
+    $('trendChart').innerHTML = bars(ms, s, { fmt: fmtN }); $('trendLegend').innerHTML = legend(s, partialNote);
+  } else {
+    var r = [{ key: 'mri', name: 'MRI', color: 'var(--mri)' }, { key: 'usg', name: 'USG', color: 'var(--usg)' }, { key: 'lab', name: 'Lab', color: 'var(--lab)' }, { key: 'other', name: 'Other', color: 'var(--other)' }];
+    $('trendChart').innerHTML = bars(ms, r, { stack: true, fmt: function (v) { return (v / 1e5).toFixed(1) + 'L'; } }); $('trendLegend').innerHTML = legend(r, partialNote);
+  }
+}
+
+function visitNote(iso) { var a = daysAgo(iso); if (a == null) return 'not visited in the app yet'; return 'visited ' + (a === 0 ? 'today' : a + (a === 1 ? ' day' : ' days') + ' ago'); }
+
+function docRows(list, empty, mode) {
+  if (!list || !list.length) return '<li><span class="note">' + empty + '</span></li>';
+  return list.map(function (r) {
+    var a = daysAgo(r.lastVisit), late = a == null || a > 14;
+    var num = mode === 'quiet' ? r.lastMonth + '<span>last month</span>' : r.soFar + '<span>' + (mode === 'new' ? 'this month' : 'vs ' + r.lastMonth) + '</span>';
+    return '<li><div class="nm"><b>' + esc(r.doctor) + '</b><span' + (late && mode !== 'new' ? ' style="color:var(--warn)"' : '') + '>' + visitNote(r.lastVisit) + '</span></div><div class="num">' + num + '</div></li>';
+  }).join('');
+}
+
+function renderRef() {
+  var r = (state.data.referrers || {})[state.ref] || {};
+  var selfTxt = r.self ? ' · self-referred ' + r.self.soFar : '';
+  $('refStats').innerHTML =
+    '<div class="card kpi"><div class="lab">Doctors sending this month</div><div class="val">' + fmtN(r.activeThisMonth) + '</div><div class="sub">last month ' + fmtN(r.activeLastMonth) + selfTxt + '</div></div>' +
+    '<div class="card kpi"><div class="lab">Top 10 doctors\' share</div><div class="val">' + (r.top10ShareLastMonth || 0) + '%</div><div class="sub">of last month\'s cases</div></div>';
+  $('refTop').innerHTML = docRows(r.topThisMonth, 'No cases yet this month.', 'top');
+  $('refNew').innerHTML = docRows(r.newThisMonth, 'No new referring doctors yet.', 'new');
+  $('refQuiet').innerHTML = docRows(r.quiet, 'None. Every regular doctor has sent at least one case.', 'quiet');
+}
+
+function renderGap() {
+  var t = (state.data[state.gap + 'Doctors'] || {}).rows || [];
+  var rows = t.filter(function (r) { return r.gap < 0; }).slice(0, 10);
+  var worst = rows.length ? -rows[0].gap : 1;
+  $('gapList').innerHTML = rows.length ? rows.map(function (r) {
+    return '<li><div class="nm"><b>' + esc(r.doctor) + '</b><span>' + r.soFar + ' so far, expected ' + r.expected + ' · potential ' + r.potential + '/month · ' + visitNote(r.lastVisit) + '</span>' +
+      '<div class="bar" style="height:6px"><i style="width:' + Math.min(100, -r.gap / worst * 100) + '%;background:var(--bad)"></i></div></div>' +
+      '<div class="num" style="color:var(--bad)">' + r.gap.toFixed(1).replace('.0', '') + '</div></li>';
+  }).join('') : '<li><span class="note">Nobody is behind.</span></li>';
+}
+
+function renderVisits(d) {
+  var v = d.visits || { weeks: [], people: [] }, palette = ['var(--mri)', 'var(--usg)', 'var(--lab)', 'var(--good)'];
+  var weeks = v.weeks.slice(); while (weeks.length && !Object.keys(weeks[0].met).length && !Object.keys(weeks[0].notMet).length) weeks.shift();
+  var rows = weeks.map(function (w) {
+    var o = { month: w.start }; v.people.forEach(function (p) { o[p] = w.met[p] || 0; }); return o;
+  });
+  var series = v.people.map(function (p, i) { return { key: p, name: p, color: palette[i % palette.length] }; });
+  var svg = bars(rows, series, { stack: true, fmt: fmtN });
+  // week labels: replace month names with day + month of the Monday
+  rows.forEach(function (r) { var p = r.month.split('-'); svg = svg.replace('>' + monthLabel(r.month) + '<', '>' + (+p[2]) + ' ' + monthLabel(r.month) + '<'); });
+  $('visitChart').innerHTML = svg;
+  var notMet = weeks.reduce(function (s, w) { return s + Object.keys(w.notMet).reduce(function (a, k) { return a + w.notMet[k]; }, 0); }, 0);
+  $('visitLegend').innerHTML = legend(series, 'Doctor met, by week starting Monday · ' + notMet + ' more visits where the doctor wasn\'t available');
+}
+
+function renderCaseLists(d) {
+  var c = d.caseLists || { counts: {} }, keys = Object.keys(c.counts);
+  $('clPeriod').textContent = c.latestPeriod ? 'for ' + c.latestPeriod : '';
+  var cls = function (k) { return /^shared/i.test(k) ? 'good' : /not visited/i.test(k) ? 'bad' : 'warn'; };
+  $('clList').innerHTML = keys.length ? keys.sort(function (a, b) { return c.counts[b] - c.counts[a]; }).map(function (k) {
+    return '<li><div class="nm"><span class="pill ' + cls(k) + '">' + esc(k) + '</span></div><div class="num">' + c.counts[k] + '<span>doctors</span></div></li>';
+  }).join('') : '<li><span class="note">No case lists yet.</span></li>';
+}
+
+/* segmented toggles + tab highlight */
+document.querySelectorAll('.seg').forEach(function (seg) {
+  seg.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    seg.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); });
+    state[seg.dataset.seg] = b.dataset.v;
+    ({ trend: renderTrend, ref: renderRef, gap: renderGap })[seg.dataset.seg]();
+  });
+});
+document.querySelectorAll('nav.tabs a').forEach(function (a) {
+  a.addEventListener('click', function (e) {
+    e.preventDefault();
+    var t = document.querySelector(a.getAttribute('href'));
+    window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - $('tabs').parentNode.offsetHeight - 6, behavior: 'smooth' });
+  });
+});
+window.addEventListener('scroll', function () {
+  var off = $('tabs').parentNode.offsetHeight + 20, cur = null;
+  document.querySelectorAll('nav.tabs a').forEach(function (a) { if (document.querySelector(a.getAttribute('href')).getBoundingClientRect().top - off <= 0) cur = a; });
+  document.querySelectorAll('nav.tabs a').forEach(function (a, i) { a.classList.toggle('on', cur ? a === cur : i === 0); });
+}, { passive: true });
+
+start();
+</script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>
