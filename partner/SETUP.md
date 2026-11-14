@@ -47,7 +47,7 @@ Both are safe to have in a public repo: the Client ID is public by design, and t
 then **Add to Home Screen** so it opens like an app.
 
 ## Day to day
-- **Add or remove someone:** edit `ALLOWED_EMAILS` in Script Properties. No redeploy needed.
+- **Add or remove someone:** edit `ALLOWED_EMAILS` in Script Properties (no redeploy needed). The Google sign-in app is in **Testing** mode (Publish was greyed out until the Branding page is complete), so also add the person under Google Cloud → Google Auth Platform → **Audience → Test users** in the "Clariti Partner Page" project. Up to 100 test users are allowed.
 - **Freshness:** the page is only as fresh as the last Hodo pull into Cases Data. It shows "Bills up to …" and
   warns when that is more than 2 days old. Numbers are cached for 10 minutes; the ↻ button rebuilds them.
 - **If you change Code.gs:** Deploy → Manage deployments → pencil → Version: **New version** → Deploy, so the URL stays the same.
